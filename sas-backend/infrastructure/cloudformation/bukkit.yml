@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  HelloBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties: 
+      AccessControl: PublicRead
+      BucketName: tones-hello-aws-vrbalwkjb
+      WebsiteConfiguration: 
+        IndexDocument: index.html
+        ErrorDocument: index.html
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref HelloBucket
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref HelloBucket
+                - /*
+  HelloDistro:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !GetAtt
+            - HelloBucket
+            - DomainName
+          Id: helloBucketS3Origin
+          S3OriginConfig:
+            OriginAccessIdentity: ''
+        Enabled: 'true'
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          TargetOriginId: helloBucketS3Origin
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: https-only
+Outputs:
+  WebsiteUrl:
+    Value: !GetAtt 
+      - HelloBucket
+      - WebsiteURL
+    Description: URL for website hosted in S3
+  S3BucketSecureURL:
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt
+          - HelloBucket
+          - DomainName
+    Description: Name of S3 bucket to hold website content
+  CloudFrontUrl:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !GetAtt
+          - HelloDistro
+          - DomainName
+    Description: URL for the website via cloudfront
