@@ -5,5 +5,6 @@
 
 bin/
 obj/
+**/*.DotSettings.user
 
 sas-frontend/
