@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace sas_backend
+namespace function
 {
     public class LocalEntryPoint
     {

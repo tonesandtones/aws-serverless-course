@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
-namespace sas_backend.Tests
+namespace function.Tests
 {
     public class FunctionTest
     {

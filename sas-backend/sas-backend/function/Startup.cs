@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using function.model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace sas_backend
+namespace function
 {
     public class Startup
     {
@@ -37,7 +34,7 @@ namespace sas_backend
 
 //            // Add S3 to the ASP.NET Core dependency injection framework.
 //            services.AddAWSService<Amazon.S3.IAmazonS3>();
-            services.AddTransient<function.model.TestDataAccessor>();
+            services.AddTransient<TestDataAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

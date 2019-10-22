@@ -11,9 +11,9 @@ Resources:
   SasBackendFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: sas-backendni
+      FunctionName: sas-backend
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
-      Handler: function::sas_backend.LambdaEntryPoint::FunctionHandlerAsync
+      Handler: function::function.LambdaEntryPoint::FunctionHandlerAsync
       Runtime: dotnetcore2.1
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:

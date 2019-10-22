@@ -1,10 +1,11 @@
 using System.IO;
 using Amazon.Lambda.AspNetCoreServer;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.Serialization.Json;
 using Microsoft.AspNetCore.Hosting;
 
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
-namespace sas_backend
+[assembly: LambdaSerializer(typeof(JsonSerializer))]
+namespace function
 {
     public class LambdaEntryPoint : APIGatewayProxyFunction
     {
