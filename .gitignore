@@ -1,1 +1,9 @@
+.vscode/
+
+# User-specific stuff
 .idea/
+
+bin/
+obj/
+
+sas-frontend/
