@@ -13,3 +13,9 @@ GET localhost:3000/items
 GET localhost:3000/items/id/1
 
 ###
+GET localhost:5000/items
+
+###
+GET localhost:5000/items/id/3
+
+###

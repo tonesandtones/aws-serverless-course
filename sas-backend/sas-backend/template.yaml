@@ -12,33 +12,18 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: sas-backendni
-      CodeUri: "src/sas-backend/bin/Release/netcoreapp2.1/publish"
-      Handler: sas-backend::sas_backend.Functions::Get
+      CodeUri: "function/bin/Release/netcoreapp2.1/publish"
+      Handler: function::sas_backend.LambdaEntryPoint::FunctionHandlerAsync
       Runtime: dotnetcore2.1
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
       Events:
-        GetItems:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /items
-            Method: get
-        GetItem:
+        Function:
           Type: Api
           Properties:
-            Path: /items/id/{id}
-            Method: get
-        GetLoansStatus:
-          Type: Api
-          Properties:
-            Path: /loans/status/{status}
-            Method: get
-        GetLoan:
-          Type: Api
-          Properties:
-            Path: /loans/id/{id}
-            Method: get
+            Path: /{proxy+}
+            Method: ANY
 
 Outputs:
   SasBackendApi:

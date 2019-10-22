@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using Xunit;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.TestUtilities;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.TestUtilities;
 using Newtonsoft.Json;
-using sas_backend;
 using Shouldly;
+using Xunit;
 
 namespace sas_backend.Tests
 {
@@ -20,20 +14,20 @@ namespace sas_backend.Tests
         }
 
         [Fact]
-        public void TetGetMethod()
+        public async Task TetGetMethod()
         {
             TestLambdaContext context;
             APIGatewayProxyRequest request;
             APIGatewayProxyResponse response;
 
-            Functions functions = new Functions();
+            var functions = new LambdaEntryPoint();
 
             request = new APIGatewayProxyRequest
             {
                 Path = "/items"
             };
             context = new TestLambdaContext();
-            response = functions.Get(request, context);
+            response = await functions.FunctionHandlerAsync(request, context);
             response.StatusCode.ShouldBe(200);
             JsonConvert.DeserializeObject(response.Body).ShouldNotBeNull();
         }
