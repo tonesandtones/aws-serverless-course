@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace function.model
 {
@@ -35,7 +37,8 @@ namespace function.model
         public string Description { get; set; }
         public string Category { get; set; }
     }
-
+    
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum LoanStatus
     {
         [EnumMember(Value = "submitted")] Submitted,

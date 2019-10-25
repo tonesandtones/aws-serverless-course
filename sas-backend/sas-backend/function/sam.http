@@ -13,9 +13,13 @@ GET localhost:3000/items
 GET localhost:3000/items/id/1
 
 ###
-GET localhost:5000/items
+GET localhost:3000/loans/status/submitted
 
 ###
-GET localhost:5000/items/id/3
+GET localhost:3000/loans/id/1
+
+###
+
+GET https://lnzcgizc90.execute-api.ap-southeast-2.amazonaws.com/Prod/items/id/6
 
 ###

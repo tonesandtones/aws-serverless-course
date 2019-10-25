@@ -8,32 +8,60 @@ Globals:
     Timeout: 10
 
 Resources:
-  SasBackendFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  GetItemsFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: sas-backend
+      FunctionName: GetItems
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
-      Handler: function::function.LambdaEntryPoint::FunctionHandlerAsync
+      Handler: function::function.EntryPoints.GetItemsEntryPoint::HandleAsync
       Runtime: dotnetcore2.1
-      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-        Variables:
-          PARAM1: VALUE
       Events:
-        Function:
+        GetItems:
           Type: Api
           Properties:
-            Path: /{proxy+}
-            Method: ANY
+            Path: /items
+            Method: Get
+  GetItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetItemById
+      CodeUri: "function/bin/Release/netcoreapp2.1/publish"
+      Handler: function::function.EntryPoints.GetItemEntryPoint::HandleAsync
+      Runtime: dotnetcore2.1
+      Events:
+        GetItemById:
+          Type: Api
+          Properties:
+            Path: /items/id/{id}
+            Method: Get
+  GetLoansByStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetLoansByStatus
+      CodeUri: "function/bin/Release/netcoreapp2.1/publish"
+      Handler: function::function.EntryPoints.GetLoansByStatus::HandleAsync
+      Runtime: dotnetcore2.1
+      Events:
+        GetLoansByStatus:
+          Type: Api
+          Properties:
+            Path: /loans/status/{status}
+            Method: Get
+  GetLoanByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetLoanById
+      CodeUri: "function/bin/Release/netcoreapp2.1/publish"
+      Handler: function::function.EntryPoints.GetLoanById::HandleAsync
+      Runtime: dotnetcore2.1
+      Events:
+        GetLoanById:
+          Type: Api
+          Properties:
+            Path: /loans/id/{id}
+            Method: Get
 
 Outputs:
   SasBackendApi:
     Description: "API Gateway endpoint URL for Prod stage for SasBackend function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/DebuggingExample/"
-
-  SasBackendFunction:
-    Description: "Debugging Example Lambda Function ARN"
-    Value: !GetAtt SasBackendFunction.Arn
-
-  SasBackendFunctionIamRole:
-    Description: "Implicit IAM Role created for Debugging Example function"
-    Value: !GetAtt SasBackendFunctionRole.Arn

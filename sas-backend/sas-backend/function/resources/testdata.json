@@ -154,5 +154,31 @@
       "category": "communications",
       "count": 20
     }
+  ],
+  "loans": [
+    {
+      "id": "1",
+      "user": "tones",
+      "selection": [
+        {
+          "id": "22",
+          "name": "Communication kit - additional station",
+          "description": "Additional station for standard communication kit (base supports up to 12 receivers).",
+          "category": "communications"
+        }
+      ],
+      "collectionDate": "2019-10-25T06:14:44.6146098+00:00",
+      "returnDate": "2019-10-25T06:14:44.6146098+00:00",
+      "reason": "blowin' shit up",
+      "status": "submitted",
+      "events": [
+        {
+          "user": "tones",
+          "eventDate": "2019-10-25T06:14:44.6146098+00:00",
+          "status": "submitted",
+          "comment": "new request"
+        }
+      ]
+    }
   ]
 }
