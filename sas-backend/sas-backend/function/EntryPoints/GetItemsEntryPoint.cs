@@ -13,25 +13,25 @@ namespace function.EntryPoints
             services
                 .AddSasServices()
                 .AddTransient<IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>, GetItemsHandler>();
+    }
 
-        public class GetItemsHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    public class GetItemsHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    {
+        private readonly IItemRepository _items;
+        private readonly IResponseBuilderFactory _builder;
+
+        public GetItemsHandler(IItemRepository items, IResponseBuilderFactory builder)
         {
-            private readonly IItemRepository _items;
-            private readonly IResponseBuilderFactory _builder;
+            _items = items;
+            _builder = builder;
+        }
 
-            public GetItemsHandler(IItemRepository items, IResponseBuilderFactory builder)
-            {
-                _items = items;
-                _builder = builder;
-            }
-
-            public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
-            {
-                var responseBody = _items.GetAllItems();
-                return _builder.Create()
-                    .WithDefaultsForEntity(responseBody)
-                    .Build();
-            }
+        public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
+        {
+            var responseBody = _items.GetAllItems();
+            return _builder.Create()
+                .WithDefaultsForEntity(responseBody)
+                .Build();
         }
     }
 }

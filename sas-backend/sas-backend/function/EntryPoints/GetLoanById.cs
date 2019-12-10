@@ -16,26 +16,26 @@ namespace function.EntryPoints
             services
                 .AddSasServices()
                 .AddTransient<IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>, GetLoanByIdHandler>();
+    }
 
-        public class GetLoanByIdHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    public class GetLoanByIdHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    {
+        private readonly ILoanRepository _loans;
+        private readonly IResponseBuilderFactory _builder;
+
+        public GetLoanByIdHandler(ILoanRepository loans, IResponseBuilderFactory builder)
         {
-            private readonly ILoanRepository _loans;
-            private readonly IResponseBuilderFactory _builder;
+            _loans = loans;
+            _builder = builder;
+        }
 
-            public GetLoanByIdHandler(ILoanRepository loans, IResponseBuilderFactory builder)
-            {
-                _loans = loans;
-                _builder = builder;
-            }
-
-            public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
-            {
-                var id = input.PathParameter("id");
-                var responseBody = _loans.GetLoanById(id);
-                return _builder.Create()
-                    .WithDefaultsForEntity(responseBody)
-                    .Build();
-            }
+        public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
+        {
+            var id = input.PathParameter("id");
+            var responseBody = _loans.GetLoanById(id);
+            return _builder.Create()
+                .WithDefaultsForEntity(responseBody)
+                .Build();
         }
     }
 }

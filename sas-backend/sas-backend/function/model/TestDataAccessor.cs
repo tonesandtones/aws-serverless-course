@@ -1,13 +1,20 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
 namespace function.model
 {
-    public class TestDataAccessor
+    public interface ITestDataAccessor
+    {
+        IEnumerable<Item> Items {get;}
+        IEnumerable<Loan> Loans {get;}
+    }
+
+    public class TestDataAccessor : ITestDataAccessor
     {
         private TestData _testData;
 
-        public TestData TestData
+        private TestData TestData
         {
             get
             {
@@ -19,6 +26,9 @@ namespace function.model
                 return _testData;
             }
         }
+
+        public IEnumerable<Item> Items => TestData.Items;
+        public IEnumerable<Loan> Loans => TestData.Loans;
 
         private TestData ReadTestData()
         {

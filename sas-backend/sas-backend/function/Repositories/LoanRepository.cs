@@ -22,12 +22,12 @@ namespace function
 
         public IEnumerable<Loan> GetLoansByStatus(LoanStatus status)
         {
-            return _accessor.TestData.Loans.Where(x => x.Status == status);
+            return _accessor.Loans.Where(x => x.Status == status);
         }
 
         public Loan GetLoanById(string id)
         {
-            return _accessor.TestData.Loans.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.InvariantCultureIgnoreCase));
+            return _accessor.Loans.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

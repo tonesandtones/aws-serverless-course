@@ -9,7 +9,7 @@ namespace function
     {
         public static IServiceCollection AddSasServices(this IServiceCollection services)
         {
-            services.AddTransient<TestDataAccessor>();
+            services.AddTransient<ITestDataAccessor, TestDataAccessor>();
             services.AddTransient<IResponseBuilderFactory, ApiGatewayProxyResponseBuilderFactory>();
             services.AddTransient<ILoanRepository, LoanRepository>();
             services.AddTransient<IItemRepository, ItemRepository>();

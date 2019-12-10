@@ -13,16 +13,16 @@ namespace function
 
     public class ItemRepository : IItemRepository
     {
-        private readonly TestDataAccessor _accessor;
+        private readonly ITestDataAccessor _accessor;
 
-        public ItemRepository(TestDataAccessor accessor)
+        public ItemRepository(ITestDataAccessor accessor)
         {
             _accessor = accessor;
         }
 
         public IEnumerable<Item> GetAllItems()
         {
-            return new List<Item>(_accessor.TestData.Items);
+            return new List<Item>(_accessor.Items);
         }
 
         public Item GetItemById(string id)
@@ -32,7 +32,7 @@ namespace function
                 return null;
             }
 
-            return _accessor.TestData.Items.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+            return _accessor.Items.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
