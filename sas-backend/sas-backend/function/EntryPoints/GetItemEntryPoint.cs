@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using function.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tiger.Lambda;
@@ -12,26 +13,33 @@ namespace function.EntryPoints
         public override void ConfigureServices(HostBuilderContext context, IServiceCollection services) =>
             services
                 .AddSasServices()
-                .AddTransient<IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>, GetItemHandler>();
+                .AddHandler<GetItemByIdHandler, APIGatewayProxyRequest, APIGatewayProxyResponse>();
     }
 
-    public class GetItemHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    public class GetItemByIdHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
     {
         private readonly IItemRepository _items;
-        private readonly IResponseBuilderFactory _builder;
+        private readonly IFactory<IBuilder<APIGatewayProxyResponse>> _response;
 
-        public GetItemHandler(IItemRepository items, IResponseBuilderFactory builder)
+        public GetItemByIdHandler(IItemRepository items, IFactory<IBuilder<APIGatewayProxyResponse>> response)
         {
             _items = items;
-            _builder = builder;
+            _response = response;
         }
 
         public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
         {
             var itemId = input?.PathParameters?["id"];
+            if (string.IsNullOrEmpty(itemId))
+            {
+                return _response.Create()
+                    .WithDefaultErrorEntity(400, "No id specified")
+                    .Build();
+            }
+            
             var responseBody = _items.GetItemById(itemId);
 
-            return _builder.Create()
+            return _response.Create()
                 .WithDefaultsForEntity(responseBody)
                 .Build();
         }

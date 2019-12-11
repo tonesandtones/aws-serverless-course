@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using function.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tiger.Lambda;
@@ -18,18 +19,18 @@ namespace function.EntryPoints
     public class GetItemsHandler : IHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
     {
         private readonly IItemRepository _items;
-        private readonly IResponseBuilderFactory _builder;
+        private readonly IFactory<IBuilder<APIGatewayProxyResponse>> _response;
 
-        public GetItemsHandler(IItemRepository items, IResponseBuilderFactory builder)
+        public GetItemsHandler(IItemRepository items, IFactory<IBuilder<APIGatewayProxyResponse>> response)
         {
             _items = items;
-            _builder = builder;
+            _response = response;
         }
 
         public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
         {
             var responseBody = _items.GetAllItems();
-            return _builder.Create()
+            return _response.Create()
                 .WithDefaultsForEntity(responseBody)
                 .Build();
         }

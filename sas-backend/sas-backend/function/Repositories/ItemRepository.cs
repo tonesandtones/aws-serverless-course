@@ -32,7 +32,7 @@ namespace function
                 return null;
             }
 
-            return _accessor.Items.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+            return _accessor.Items.FirstOrDefault(x => string.Equals(x.Id,id, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -1,5 +1,7 @@
 using Amazon.Lambda.APIGatewayEvents;
+using function.Builders;
 using function.model;
+using function.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Tiger.Lambda;
 
@@ -10,7 +12,7 @@ namespace function
         public static IServiceCollection AddSasServices(this IServiceCollection services)
         {
             services.AddTransient<ITestDataAccessor, TestDataAccessor>();
-            services.AddTransient<IResponseBuilderFactory, ApiGatewayProxyResponseBuilderFactory>();
+            services.AddTransient<IFactory<IBuilder<APIGatewayProxyResponse>>, ApiGatewayProxyResponseBuilderFactory>();
             services.AddTransient<ILoanRepository, LoanRepository>();
             services.AddTransient<IItemRepository, ItemRepository>();
             return services;
@@ -26,12 +28,20 @@ namespace function
     {
         public static string PathParameter(this APIGatewayProxyRequest request, string parameterName)
         {
-            return request?.PathParameters?[parameterName];
+            if (request?.PathParameters?.ContainsKey(parameterName) ?? false)
+            {
+                return request?.PathParameters?[parameterName];
+            }
+            return null;
         }
         
         public static string QueryParameter(this APIGatewayProxyRequest request, string parameterName)
         {
-            return request?.QueryStringParameters?[parameterName];
+            if (request?.QueryStringParameters?.ContainsKey(parameterName) ?? false)
+            {
+                return request?.QueryStringParameters?[parameterName];
+            }
+            return null;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Amazon.Lambda.APIGatewayEvents;
+using function.Builders;
 
 namespace function.Tests.EntryPoints
 {
@@ -8,14 +9,14 @@ namespace function.Tests.EntryPoints
         public static T WithPathParameter<T>(this T builder, string pathParam, string value)
             where T : IBuilder<APIGatewayProxyRequest>
         {
-            builder.WithAction(x => x.PathParameters[pathParam] = value);
+            builder.AppendAction(x => x.PathParameters[pathParam] = value);
             return builder;
         }
 
         public static T WithQueryParameter<T>(this T builder, string queryParam, string value)
             where T : IBuilder<APIGatewayProxyRequest>
         {
-            builder.WithAction(x => x.QueryStringParameters[queryParam] = value);
+            builder.AppendAction(x => x.QueryStringParameters[queryParam] = value);
             return builder;
         }
     }

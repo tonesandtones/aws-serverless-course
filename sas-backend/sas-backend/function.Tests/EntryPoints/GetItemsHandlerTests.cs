@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Amazon.Lambda.TestUtilities;
 using AutoBogus;
@@ -13,10 +12,10 @@ namespace function.Tests.EntryPoints
 {
     public class GetItemsHandlerTests
     {
-        [Fact]
-        public async Task TestGetItemsHandler()
+        [Theory]
+        [MemberData(nameof(ItemsData))]
+        public async Task TestGetItemsHandler(IEnumerable<Item> items)
         {
-            var items = AutoFaker.Generate<Item>(50);
             var resolver = TestSasServices
                 .DefaultServiceCollection()
                 .WithDefaultFunctionHandlers()
@@ -24,7 +23,7 @@ namespace function.Tests.EntryPoints
                 .BuildServiceProvider();
 
             var handler = resolver.GetRequiredService<GetItemsHandler>();
-            
+
             var request = new ApiGatewayProxyRequestBuilder().Build();
             var lambdaContext = new TestLambdaContext();
             var response = await handler.HandleAsync(request, lambdaContext);
@@ -35,6 +34,15 @@ namespace function.Tests.EntryPoints
                 .Body
                 .ShouldBeParseableAs<IList<Item>>()
                 .ShouldDeepEqual(items);
+        }
+
+        public static IEnumerable<object[]> ItemsData()
+        {
+            return new List<object[]>
+            {
+                new object[] {AutoFaker.Generate<Item>(50)},
+                new object[] {new List<Item>()} //empty list
+            };
         }
     }
 }

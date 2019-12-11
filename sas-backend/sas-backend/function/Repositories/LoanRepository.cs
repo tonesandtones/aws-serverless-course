@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using function.model;
 
-namespace function
+namespace function.Repositories
 {
     public interface ILoanRepository
     {
@@ -13,9 +13,9 @@ namespace function
 
     public class LoanRepository : ILoanRepository
     {
-        private readonly TestDataAccessor _accessor;
+        private readonly ITestDataAccessor _accessor;
 
-        public LoanRepository(TestDataAccessor accessor)
+        public LoanRepository(ITestDataAccessor accessor)
         {
             _accessor = accessor;
         }

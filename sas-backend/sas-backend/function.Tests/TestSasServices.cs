@@ -22,7 +22,7 @@ namespace function.Tests.EntryPoints
         public static ServiceCollection WithDefaultFunctionHandlers(this ServiceCollection services)
         {
             services.AddTransient<GetItemsHandler>();
-            services.AddTransient<GetItemHandler>();
+            services.AddTransient<GetItemByIdHandler>();
             services.AddTransient<GetLoanByIdHandler>();
             services.AddTransient<GetLoansByStatusHandler>();
             return services;
