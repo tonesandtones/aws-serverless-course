@@ -74,12 +74,12 @@ namespace function.Builders
                 .WithStatusCode(statusCode); //replace the status code with the one we want.
             return builder;
         }
-        
+
         public static T WithDefaultErrorEntity<T>(this T builder, HttpStatusCode statusCode, string message = null)
             where T : IBuilder<APIGatewayProxyResponse>
         {
             builder
-                .WithDefaultsForEntity(new ErrorResponse() {StatusCode = (int)statusCode, Error = message})
+                .WithDefaultsForEntity(new ErrorResponse() {StatusCode = (int) statusCode, Error = message})
                 .WithStatusCode(statusCode); //replace the status code with the one we want.
             return builder;
         }

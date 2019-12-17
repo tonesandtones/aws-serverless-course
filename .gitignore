@@ -8,3 +8,5 @@ obj/
 **/*.DotSettings.user
 
 sas-frontend/
+
+template.packaged.yaml

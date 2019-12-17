@@ -9,10 +9,9 @@ namespace function.Builders
             return new ApiGatewayProxyResponseBuilder();
         }
     }
-    
+
     public interface IFactory<out T>
     {
         T Create();
     }
-    
 }

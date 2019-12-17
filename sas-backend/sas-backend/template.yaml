@@ -60,8 +60,21 @@ Resources:
           Properties:
             Path: /loans/id/{id}
             Method: Get
+  PostTestLoansFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: PostTestLoans
+      CodeUri: "function/bin/Release/netcoreapp2.1/publish"
+      Handler: function::function.EntryPoints.CreateLoansEntryPoint::HandleAsync
+      Runtime: dotnetcore2.1
+      Events:
+        GetLoanById:
+          Type: Api
+          Properties:
+            Path: /loans/all
+            Method: Post
 
 Outputs:
   SasBackendApi:
     Description: "API Gateway endpoint URL for Prod stage for SasBackend function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/DebuggingExample/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

@@ -25,6 +25,7 @@ namespace function.Tests.EntryPoints
             services.AddTransient<GetItemByIdHandler>();
             services.AddTransient<GetLoanByIdHandler>();
             services.AddTransient<GetLoansByStatusHandler>();
+            services.AddTransient<ImportTestDataHandler>();
             return services;
         }
         

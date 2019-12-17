@@ -34,7 +34,7 @@ namespace function.EntryPoints
         public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
         {
             var statusStr = input.PathParameter("status");
-            
+
             bool canParse = Enum.TryParse(statusStr, true, out LoanStatus status);
             if (!canParse)
             {
@@ -46,7 +46,7 @@ namespace function.EntryPoints
                     .Build();
             }
 
-            var responseBody = _loans.GetLoansByStatus(status);
+            var responseBody = await _loans.GetLoansByStatus(status);
             return _response.Create()
                 .WithDefaultsForEntity(responseBody)
                 .Build();

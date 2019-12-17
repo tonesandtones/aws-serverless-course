@@ -37,8 +37,8 @@ namespace function.EntryPoints
                     .WithDefaultErrorEntity(400, "No id specified")
                     .Build();
             }
-            
-            var responseBody = _loans.GetLoanById(id);
+
+            var responseBody = await _loans.GetLoanById(id);
             return _response.Create()
                 .WithDefaultsForEntity(responseBody)
                 .Build();

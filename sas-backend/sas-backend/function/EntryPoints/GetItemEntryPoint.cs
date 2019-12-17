@@ -36,8 +36,8 @@ namespace function.EntryPoints
                     .WithDefaultErrorEntity(400, "No id specified")
                     .Build();
             }
-            
-            var responseBody = _items.GetItemById(itemId);
+
+            var responseBody = await _items.GetItemById(itemId);
 
             return _response.Create()
                 .WithDefaultsForEntity(responseBody)

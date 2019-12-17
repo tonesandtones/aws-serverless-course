@@ -29,7 +29,7 @@ namespace function.EntryPoints
 
         public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
         {
-            var responseBody = _items.GetAllItems();
+            var responseBody = await _items.GetAllItems();
             return _response.Create()
                 .WithDefaultsForEntity(responseBody)
                 .Build();

@@ -6,8 +6,8 @@ namespace function.model
 {
     public interface ITestDataAccessor
     {
-        IEnumerable<Item> Items {get;}
-        IEnumerable<Loan> Loans {get;}
+        IEnumerable<Item> Items { get; }
+        IEnumerable<Loan> Loans { get; }
     }
 
     public class TestDataAccessor : ITestDataAccessor
