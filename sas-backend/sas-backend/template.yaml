@@ -6,6 +6,21 @@ Description: Sample SAM Template for sas-backend
 Globals:
   Function:
     Timeout: 10
+    Runtime: dotnetcore2.1
+    Environment:
+      Variables:
+        # note the "__". This is the ASP.NET hierarchical config-key-as-environment-variable separator
+        # https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#environment-variables-configuration-provider
+#        DynamoDb__LoansTableName: !GetAtt LoansTable.Name
+#        DynamoDb__ItemsTableName: !GetAtt ItemsTable.Name
+        DynamoDb__LoansTableName: sas-loans-dev
+        DynamoDb__ItemsTableName: sas-items-dev
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    Description: Name of the stage
 
 Resources:
   GetItemsFunction:
@@ -14,7 +29,6 @@ Resources:
       FunctionName: GetItems
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
       Handler: function::function.EntryPoints.GetItemsEntryPoint::HandleAsync
-      Runtime: dotnetcore2.1
       Events:
         GetItems:
           Type: Api
@@ -27,7 +41,6 @@ Resources:
       FunctionName: GetItemById
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
       Handler: function::function.EntryPoints.GetItemEntryPoint::HandleAsync
-      Runtime: dotnetcore2.1
       Events:
         GetItemById:
           Type: Api
@@ -40,7 +53,6 @@ Resources:
       FunctionName: GetLoansByStatus
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
       Handler: function::function.EntryPoints.GetLoansByStatus::HandleAsync
-      Runtime: dotnetcore2.1
       Events:
         GetLoansByStatus:
           Type: Api
@@ -53,7 +65,6 @@ Resources:
       FunctionName: GetLoanById
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
       Handler: function::function.EntryPoints.GetLoanById::HandleAsync
-      Runtime: dotnetcore2.1
       Events:
         GetLoanById:
           Type: Api
@@ -65,14 +76,46 @@ Resources:
     Properties:
       FunctionName: PostTestLoans
       CodeUri: "function/bin/Release/netcoreapp2.1/publish"
-      Handler: function::function.EntryPoints.CreateLoansEntryPoint::HandleAsync
-      Runtime: dotnetcore2.1
+      Handler: function::function.EntryPoints.ImportTestDataEntryPoint::HandleAsync
       Events:
         GetLoanById:
           Type: Api
           Properties:
-            Path: /loans/all
+            Path: /importtestdata
             Method: Post
+
+  ItemsTable:
+    Type: AWS::DynamoDB::Table
+    TableName: !sub "sas_items_${Stage}"
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+  
+  LoansTable:
+    Type: AWS::DynamoDB::Table
+    TableName: !sub "sas_loans_${Stage}"
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions: 
+      - AttributeName: id
+        AttributeType: S
+      - AttributeName: status
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: "by_status"
+        KeySchema:
+          - AttributeName: status
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        Projection: 
+          ProjectType: ALL
 
 Outputs:
   SasBackendApi:

@@ -47,7 +47,7 @@ namespace function.model
         public string User { get; set; }
 
         [DynamoDBProperty("selection")]
-        public IList<SelectionItem> Selection { get; set; }
+        public List<SelectionItem> Selection { get; set; }
 
         [DynamoDBProperty("collection_date")]
         public DateTime CollectionDate { get; set; }
@@ -63,7 +63,7 @@ namespace function.model
         public LoanStatus Status { get; set; }
 
         [DynamoDBProperty("events")]
-        public IList<LoanEvent> Events { get; set; }
+        public List<LoanEvent> Events { get; set; }
     }
 
     public class SelectionItem : IIdentifiable

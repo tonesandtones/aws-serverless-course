@@ -44,6 +44,9 @@ namespace function.EntryPoints
 
         public async Task<APIGatewayProxyResponse> HandleAsync(APIGatewayProxyRequest input, ILambdaContext context)
         {
+            context.Logger.Log($"Got items table name: {_config.ItemsTableName}");
+            context.Logger.Log($"Got loans table name: {_config.LoansTableName}");
+            
             var loanBatch = _context.CreateBatchWrite<Loan>(new DynamoDBOperationConfig() {OverrideTableName = _config.LoansTableName});
             loanBatch.AddPutItems(_testData.Loans);
             await loanBatch.ExecuteAsync();

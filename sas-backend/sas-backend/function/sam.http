@@ -10,7 +10,7 @@ GET localhost:3000/items
 
 ###
 
-GET localhost:3000/items/id/2
+GET localhost:3000/items/id/5
 
 ###
 GET localhost:3000/loans/status/submitted
@@ -24,6 +24,6 @@ GET https://lnzcgizc90.execute-api.ap-southeast-2.amazonaws.com/Prod/items/id/1
 
 ###
 
-POST http://localhost:3000/loans/all
+POST http://localhost:3000/importtestdata
 
 ###

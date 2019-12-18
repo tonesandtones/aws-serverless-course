@@ -1,5 +1,5 @@
 {
-  "TableName": "sas-items",
+  "TableName": "sas-items-dev",
   "KeySchema": [
     {
       "AttributeName": "id",

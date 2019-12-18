@@ -19,8 +19,10 @@ namespace function
         {
             services.AddTransient<ITestDataAccessor, TestDataAccessor>();
             services.AddTransient<IFactory<IBuilder<APIGatewayProxyResponse>>, ApiGatewayProxyResponseBuilderFactory>();
-            services.AddTransient<ILoanRepository, TestDataLoanRepository>();
-            services.AddTransient<IItemRepository, TestDataItemRepository>();
+            // services.AddTransient<ILoanRepository, TestDataLoanRepository>();
+            services.AddTransient<ILoanRepository, DynamoDbLoanRepository>();
+            // services.AddTransient<IItemRepository, TestDataItemRepository>();
+            services.AddTransient<IItemRepository, DynamoDbItemRepository>();
 
             services.AddSingleton<IConfiguration>(s =>
             {
@@ -28,6 +30,7 @@ namespace function
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", false)
                     .AddJsonFile("appsettings.development.json", true)
+                    .AddEnvironmentVariables()
                     .Build();
             });
 
@@ -39,10 +42,18 @@ namespace function
             });
 
             services.AddTransient<IDynamoDbClientFactory, DynamoDbClientFactory>();
-            services.AddTransient<IAmazonDynamoDB>(s => s.GetRequiredService<IDynamoDbClientFactory>().Create());
-
+            
+            //register the concrete implementation, satisfied by the factory
+            services.AddTransient<AmazonDynamoDBClient>(s => s.GetRequiredService<IDynamoDbClientFactory>().Create());
+            //register the interface, satisfied by the concrete impl registration
+            services.AddTransient<IAmazonDynamoDB>(s => s.GetRequiredService<AmazonDynamoDBClient>());
+            
             services.AddTransient<IDynamoDbContextFactory, DynamoDbContextFactory>();
-            services.AddTransient<IDynamoDBContext>(s => s.GetRequiredService<IDynamoDbContextFactory>().Create());
+            
+            //register the concrete implementation, satisfied by the factory
+            services.AddTransient<DynamoDBContext>(s => s.GetRequiredService<IDynamoDbContextFactory>().Create());
+            //register the interface, satisfied by the concrete impl registration
+            services.AddTransient<IDynamoDBContext>(s => s.GetRequiredService<DynamoDBContext>());
 
             return services;
         }

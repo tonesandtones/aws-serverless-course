@@ -10,10 +10,10 @@ namespace function.DynamoDb
 {
     public class DynamoDbLoanRepository : ILoanRepository
     {
-        private readonly DynamoDBContext _context;
+        private readonly IDynamoDBContext _context;
         private readonly SasDynamoDbConfig _config;
 
-        public DynamoDbLoanRepository(DynamoDBContext context, SasDynamoDbConfig config)
+        public DynamoDbLoanRepository(IDynamoDBContext context, SasDynamoDbConfig config)
         {
             _context = context;
             _config = config;

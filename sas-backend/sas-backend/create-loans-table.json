@@ -1,5 +1,5 @@
 {
-  "TableName": "sas-loans",
+  "TableName": "sas-loans-dev",
   "KeySchema": [
     {
       "AttributeName": "id",
