@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using function.EntryPoints;
 using function.model;
+using function.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -16,6 +17,14 @@ namespace function.Tests.EntryPoints
         private static ServiceCollection WithDefaultSasRegistrations(this ServiceCollection services)
         {
             services.AddSasServices();
+            
+            //replace the registrations for IXyzRepository with TestDataXyzRepository implementations
+            services.RemoveAll<IItemRepository>();
+            services.RemoveAll<ILoanRepository>();
+            
+            services.AddTransient<IItemRepository, TestDataItemRepository>();
+            services.AddTransient<ILoanRepository, TestDataLoanRepository>();
+            
             return services;
         }
         
